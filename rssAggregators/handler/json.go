@@ -1,4 +1,4 @@
-package main
+package handler
 
 import (
 	"encoding/json"
@@ -8,6 +8,7 @@ import (
 
 func respondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
 	data, err := json.Marshal(payload)
+
 	if err != nil {
 		log.Println("Failed to marshal jSON")
 		w.WriteHeader(500)
@@ -34,10 +35,14 @@ func respondWithError(w http.ResponseWriter, code int, msg string) {
 
 }
 
-func testHandler(w http.ResponseWriter, r *http.Request) {
-	respondWithJSON(w, 200, struct{}{})
+func TestSuccessHandler(w http.ResponseWriter, r *http.Request) {
+	respondWithJSON(w, 200, struct {
+		Message string `json:"message"`
+	}{
+		Message: "Hello World2",
+	})
 }
 
-func errHandler(w http.ResponseWriter, r *http.Request) {
+func TestErrHandler(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, 500, "Server error")
 }
